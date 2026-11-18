@@ -1,11 +1,13 @@
 name: Build and Push All Microservices
  
 on:
-  workflow_dispatch:
+  push:
+    Branch:
+      - main
  
 env:
   AWS_REGION: ap-south-1
-  ECR_REGISTRY: 211579682606.dkr.ecr.ap-south-1.amazonaws.com
+  ECR_REGISTRY: 611095750637.dkr.ecr.ap-south-1.amazonaws.com
  
 jobs:
   build-and-push:
