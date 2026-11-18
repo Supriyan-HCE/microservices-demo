@@ -1,0 +1,95 @@
+name: Build and Push All Microservices
+ 
+on:
+  workflow_dispatch:
+ 
+env:
+  AWS_REGION: ap-south-1
+  ECR_REGISTRY: 211579682606.dkr.ecr.ap-south-1.amazonaws.com
+ 
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+ 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+ 
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+ 
+      # ADSERVICE
+      - name: Build and Push Adservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-adservice:latest src/adservice
+          docker push $ECR_REGISTRY/online-boutique-adservice:latest
+ 
+      # CARTSERVICE
+      - name: Build and Push Cartservice
+        run: |
+          docker build \
+            -f src/cartservice/src/Dockerfile \
+            -t $ECR_REGISTRY/online-boutique-cartservice:latest \
+            src/cartservice/src
+          docker push $ECR_REGISTRY/online-boutique-cartservice:latest
+ 
+      # CHECKOUTSERVICE
+      - name: Build and Push Checkoutservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-checkoutservice:latest src/checkoutservice
+          docker push $ECR_REGISTRY/online-boutique-checkoutservice:latest
+ 
+      # CURRENCYSERVICE
+      - name: Build and Push Currencyservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-currencyservice:latest src/currencyservice
+          docker push $ECR_REGISTRY/online-boutique-currencyservice:latest
+ 
+      # EMAILSERVICE
+      - name: Build and Push Emailservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-emailservice:latest src/emailservice
+          docker push $ECR_REGISTRY/online-boutique-emailservice:latest
+ 
+      # FRONTEND
+      - name: Build and Push Frontend
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-frontend:latest src/frontend
+          docker push $ECR_REGISTRY/online-boutique-frontend:latest
+ 
+      # PAYMENTSERVICE
+      - name: Build and Push Paymentservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-paymentservice:latest src/paymentservice
+          docker push $ECR_REGISTRY/online-boutique-paymentservice:latest
+ 
+      # PRODUCTCATALOGSERVICE
+      - name: Build and Push Productcatalogservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-productcatalogservice:latest src/productcatalogservice
+          docker push $ECR_REGISTRY/online-boutique-productcatalogservice:latest
+ 
+      # RECOMMENDATIONSERVICE
+      - name: Build and Push Recommendationservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-recommendationservice:latest src/recommendationservice
+          docker push $ECR_REGISTRY/online-boutique-recommendationservice:latest
+ 
+      # SHIPPINGSERVICE
+      - name: Build and Push Shippingservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-shippingservice:latest src/shippingservice
+          docker push $ECR_REGISTRY/online-boutique-shippingservice:latest
+ 
+      # SHOPPINGASSISTANTSERVICE
+      - name: Build and Push Shoppingassistantservice
+        run: |
+          docker build -t $ECR_REGISTRY/online-boutique-shoppingassistantservice:latest src/shoppingassistantservice
+          docker push $ECR_REGISTRY/online-boutique-shoppingassistantservice:latest
